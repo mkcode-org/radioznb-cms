@@ -8,15 +8,15 @@ import { RadioCMS } from "./RadioCMS";
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-8">
-        <h2 className="text-xl font-semibold text-primary">
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-2 sm:px-8">
+        <h2 className="text-md sm:text-lg md:text-xl font-semibold text-primary">
           архив радио зимы не будет
         </h2>
         <Authenticated>
           <SignOutButton />
         </Authenticated>
       </header>
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-2 sm:p-8">
         <Content />
       </main>
       <Toaster />
