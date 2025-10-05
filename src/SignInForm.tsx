@@ -18,9 +18,10 @@ export function SignInForm() {
           formData.set("flow", localStorage.getItem("flow") ?? "signIn");
           void signIn("password", formData).catch((error) => {
             let toastTitle = "";
-            if (error.message.includes("Invalid password")) {
+            if (error.message.includes("invalid password")) {
               toastTitle = "неверный пароль";
             } else {
+              console.log(error);
               toastTitle = "не получилось авторизовать";
             }
             toast.error(toastTitle);
