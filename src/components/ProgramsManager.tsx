@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { toast } from "sonner";
+import { Edit, Trash } from "lucide-react";
 
 export function ProgramsManager() {
   const programs = useQuery(api.programs.list);
@@ -194,13 +195,13 @@ export function ProgramsManager() {
                   onClick={() => handleEdit(program)}
                   className="text-primary hover:text-primary-hover/80"
                 >
-                  редактировать
+                  <Edit />
                 </button>
                 <button
                   onClick={() => handleDelete(program._id)}
                   className="text-red-600 hover:text-red-800"
                 >
-                  удалить
+                  <Trash />
                 </button>
               </div>
             </div>

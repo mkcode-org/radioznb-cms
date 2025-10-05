@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { toast } from "sonner";
+import { Edit, Trash } from "lucide-react";
 
 export function PeopleManager() {
   const people = useQuery(api.people.list);
@@ -32,6 +33,7 @@ export function PeopleManager() {
         });
         toast.success("обновили");
         setEditingId(null);
+        setIsCreating(false);
       } else {
         await createPerson({
           name: formData.name,
@@ -154,18 +156,18 @@ export function PeopleManager() {
           <div key={person._id} className="border rounded-lg p-4">
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-lg font-medium">{person.name}</h3>
-              <div className="flex space-x-2">
+              <div className="flex space-x-3 ml-4">
                 <button
                   onClick={() => handleEdit(person)}
                   className="text-primary hover:text-primary-hover/80 text-sm"
                 >
-                  редактировать
+                  <Edit />
                 </button>
                 <button
                   onClick={() => handleDelete(person._id)}
                   className="text-red-600 hover:text-red-800 text-sm"
                 >
-                  удалить
+                  <Trash />
                 </button>
               </div>
             </div>

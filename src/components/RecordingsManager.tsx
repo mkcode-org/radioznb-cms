@@ -35,8 +35,8 @@ export function RecordingsManager() {
     }
   };
 
-  if (!recordings || !programs || !people || !genres) {
-    return <div className="p-6">загрузка записей...</div>;
+  if (!recordings) {
+    return <div className="p-6">загрузка файлов...</div>;
   }
 
   function formatDuration(duration: number): string {
@@ -127,7 +127,7 @@ export function RecordingsManager() {
                 </div>
               </div>
               <div className="flex flex-col justify-between ml-4">
-                <div className="flex justify-between space-x-2">
+                <div className="flex space-x-3 ml-4">
                   <button
                     onClick={() => handleEdit(recording)}
                     className="text-primary hover:text-primary-hover/80"

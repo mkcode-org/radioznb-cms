@@ -40,10 +40,20 @@ export function RadioCMS() {
 
       {/* Tab Content */}
       <div className="bg-white rounded-lg shadow">
-        {activeTab === "programs" && <ProgramsManager />}
-        {activeTab === "people" && <PeopleManager />}
-        {activeTab === "recordings" && <RecordingsManager />}
-        {activeTab === "genres" && <GenresManager />}
+        <div className="mt-6">
+          <div className={activeTab === "programs" ? "block" : "hidden"}>
+            <ProgramsManager />
+          </div>
+          <div className={activeTab === "people" ? "block" : "hidden"}>
+            <PeopleManager />
+          </div>
+          <div className={activeTab === "recordings" ? "block" : "hidden"}>
+            <RecordingsManager />
+          </div>
+          <div className={activeTab === "genres" ? "block" : "hidden"}>
+            <GenresManager />
+          </div>
+        </div>
       </div>
     </div>
   );
