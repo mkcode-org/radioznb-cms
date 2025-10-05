@@ -285,6 +285,16 @@ export const getRecordingGenres = query({
   },
 });
 
+export const getAudioUrl = query({
+  args: { id: v.id("recordings") },
+  handler: async (ctx, args) => {
+    await requireAuth(ctx);
+    const recording = await ctx.db.get(args.id);
+    if (!recording) return null;
+    return await ctx.storage.getUrl(recording.audioFileId);
+  },
+});
+
 export const deleteUntaggedFiles = internalMutation({
   args: {},
   handler: async (ctx) => {

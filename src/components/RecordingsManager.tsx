@@ -4,6 +4,8 @@ import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { toast } from "sonner";
 import RecordingsForm from "./RecordingsForm";
+import { Download, Edit, Trash } from "lucide-react";
+import RecordingDownload from "./RecordingDownload";
 
 export function RecordingsManager() {
   const recordings = useQuery(api.recordings.list);
@@ -74,7 +76,7 @@ export function RecordingsManager() {
       <div className="space-y-4">
         {recordings.map((recording) => (
           <div key={recording._id} className="border rounded-lg p-4">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-stretch">
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-2">
                   <h3 className="text-lg font-medium">
@@ -104,11 +106,6 @@ export function RecordingsManager() {
                   >
                     {recording.type === "live" ? "прямой эфир" : "подкаст"}
                   </span>
-                  {recording.audioFileId && (
-                    <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">
-                      аудио
-                    </span>
-                  )}
                 </div>
                 <p className="text-gray-600 mb-1 text-lg">
                   передача: {recording.program}
@@ -129,21 +126,27 @@ export function RecordingsManager() {
                   )}
                 </div>
               </div>
-              <div className="flex space-x-2 ml-4">
-                <button
-                  onClick={() => handleEdit(recording)}
-                  className="text-primary hover:text-primary-hover/80"
-                >
-                  редактировать
-                </button>
-                <button
-                  onClick={() => {
-                    handleDelete(recording._id);
-                  }}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  удалить
-                </button>
+              <div className="flex flex-col justify-between ml-4">
+                <div className="flex justify-between space-x-2">
+                  <button
+                    onClick={() => handleEdit(recording)}
+                    className="text-primary hover:text-primary-hover/80"
+                  >
+                    <Edit />
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDelete(recording._id);
+                    }}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    <Trash />
+                  </button>
+                </div>
+                <div className="flex-grow"></div>
+                <div className="text-right">
+                  <RecordingDownload recordingId={recording._id} />
+                </div>
               </div>
             </div>
           </div>

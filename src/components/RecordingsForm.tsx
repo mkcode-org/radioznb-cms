@@ -75,7 +75,7 @@ export default function RecordingsForm({
         guests,
       });
     }
-  }, [editingId]);
+  }, [recording]);
 
   const getAudioDuration = (file: File): Promise<number> => {
     return new Promise((resolve) => {
@@ -181,6 +181,7 @@ export default function RecordingsForm({
         });
         toast.success("запись обновлена успешно");
         setEditingId(null);
+        setIsCreating(false);
       } else {
         await createRecording(recordingData);
         toast.success("запись создана успешно");
