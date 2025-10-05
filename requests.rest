@@ -1,0 +1,3 @@
+###
+GET postgres://nhoogevimehluqwehnhz.supabase.co/
+Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ob29nZXZpbWVobHVxd2Vobmh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NDkxMTAsImV4cCI6MjA3NTAyNTExMH0.GqVVXxQf_pVXZvZHSRCFzCihwlNnxVRZ9zsoP-RV6Qk"
