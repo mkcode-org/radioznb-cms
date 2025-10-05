@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 
 const convex = new ConvexReactClient(
-  import.meta.env.VITE_CONVEX_URL || "http://176.124.208.218:3210"
+  import.meta.env.VITE_CONVEX_URL || "https://api.radioznb.ru"
 );
 
 createRoot(document.getElementById("root")!).render(
