@@ -59,8 +59,7 @@ export function GenresManager() {
 					<AddButton
 						type='submit'
 						disabled={!newGenreName}
-            className='opacity-0'
-						// className={`${!!newGenreName.length ? 'opacity-30' : ''}`}
+						style={{ opacity: !newGenreName ? 0.5 : 1 }}
 					/>
 				</form>
 			</div>
