@@ -86,7 +86,7 @@ export function PeopleManager() {
 	}
 
 	return (
-		<div className='p-6'>
+		<div>
 			<div className='flex justify-between items-center mb-6'>
 				<h2 className='text-xl font-semibold pl-4'>люди (ведущие и гости)</h2>
 				{!isCreating && <AddButton onClick={() => setIsCreating(true)} />}

@@ -40,7 +40,7 @@ export function RadioCMS() {
 
 			{/* Tab Content */}
 			<div className='bg-white rounded-lg shadow'>
-				<div className='mt-6'>
+				<div className='mt-6 p-4 md:p-6'>
 					<div className={activeTab === 'programs' ? 'block' : 'hidden'}>
 						<ProgramsManager />
 					</div>

@@ -44,7 +44,7 @@ export function GenresManager() {
 	}
 
 	return (
-		<div className='p-6'>
+		<div>
 			<div className='mb-6'>
 				<h2 className='text-xl font-semibold mb-4 pl-4'>жанры</h2>
 
