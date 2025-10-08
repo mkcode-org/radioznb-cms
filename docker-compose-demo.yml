@@ -1,0 +1,144 @@
+services:
+  tg-spam:
+    image: ghcr.io/umputun/tg-spam:latest
+    hostname: tg-spam
+    restart: always
+    container_name: tg-spam
+    logging: &default_logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    environment:
+      - TELEGRAM_TOKEN
+      - TELEGRAM_GROUP
+      - TZ=Europe/Moscow
+      - ADMIN_GROUP=-4696545903
+      - LOGGER_ENABLED=true
+      - LOGGER_FILE=/srv/logs/tg-spam.log
+      - LOGGER_MAX_SIZE=5M
+      - NO_SPAM_REPLY=true
+      - SERVER_ENABLED=true
+      - MAX_EMOJI=-1
+      - SERVER_AUTH=fez
+    volumes:
+      - tg-data:/srv/data
+      - ./logs:/srv/logs
+    command: --super=sukalov --super=ivanvorr --super=chebjke --super=mischmee --super=sevanrit
+    labels:
+      reproxy.server: "inkvizitor.sukalov.dev"
+      reproxy.port: "8080"
+      reproxy.ping: "/ping"
+      reproxy.route: "^/(.*)"
+      reproxy.dest: "/$$1"
+
+  convex-backend:
+    image: ghcr.io/get-convex/convex-backend:latest
+    container_name: convex-backend
+    stop_grace_period: 10s
+    stop_signal: SIGINT
+    volumes:
+      - convex-data:/convex/data
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - INSTANCE_NAME=radioznb
+      - INSTANCE_SECRET=<SECRET>
+      - CONVEX_RELEASE_VERSION_DEV
+      - ACTIONS_USER_TIMEOUT_SECS
+      - PORT=3210
+      - SITE_PROXY_PORT=3211
+      - CONVEX_CLOUD_ORIGIN=https://api.radioznb.ru
+      - CONVEX_SITE_ORIGIN=https://api.radioznb.ru/site
+      - CONVEX_MAX_FUNCTION_EXECUTION_TIME=30000                                                                                                                                             - DISABLE_BEACON
+      - REDACT_LOGS_TO_CLIENT
+      - DO_NOT_REQUIRE_SSL
+      - POSTGRES_URL
+      - MYSQL_URL
+      - RUST_LOG=${RUST_LOG:-info}
+      - RUST_BACKTRACE
+      - AWS_REGION=eu-central-003
+      - AWS_ACCESS_KEY_ID=<SECRET>
+      - AWS_SECRET_ACCESS_KEY=<SECRET>
+      - AWS_SESSION_TOKEN
+      - AWS_S3_FORCE_PATH_STYLE
+      - AWS_S3_DISABLE_SSE
+      - AWS_S3_DISABLE_CHECKSUMS
+      - S3_ENDPOINT_URL=https://s3.eu-central-003.backblazeb2.com
+      - S3_STORAGE_EXPORTS_BUCKET=radioznb
+      - S3_STORAGE_FILES_BUCKET=radioznb
+      - S3_STORAGE_MODULES_BUCKET=radioznb
+      - S3_STORAGE_SEARCH_BUCKET=radioznb
+      - S3_STORAGE_SNAPSHOT_IMPORTS_BUCKET=radioznb
+      - JWT_PRIVATE_KEY="-----BEGIN PRIVATE KEY----- <SECRET> -----END PRIVATE KEY-----"
+      - JWKS={"keys":[{"use":"sig","kty":"RSA","n":"<SECRET>","e":"AQAB"}]}
+    healthcheck:
+      test: curl -f http://localhost:3210/version
+      interval: 5s
+      start_period: 10s
+    labels:
+      reproxy.server: "api.radioznb.ru"
+      reproxy.keep-host: "yes"
+      reproxy.1.port: "3210"
+      reproxy.2.port: "3211"
+      reproxy.1.route: "^/(.*)"
+      reproxy.2.route: "^/site/(.*)"
+      reproxy.1.dest: "http://convex-backend:3210/$$1"
+      reproxy.2.dest: "http://convex-backend:3211/$$1"
+
+  convex-dashboard:
+    image: ghcr.io/get-convex/convex-dashboard:latest
+    container_name: convex-dashboard
+    stop_grace_period: 10s
+    stop_signal: SIGINT
+    environment:
+      - NEXT_PUBLIC_DEPLOYMENT_URL=https://api.radioznb.ru
+    depends_on:
+      convex-backend:
+        condition: service_healthy
+    labels:
+      reproxy.server: "dashboard.radioznb.ru"
+      reproxy.port: "6791"
+      reproxy.route: "^/(.*)"
+      reproxy.dest: "/$$1"
+
+  cms-frontend:
+    image: nginx:alpine
+    container_name: cms-frontend
+    restart: always
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+    labels:
+      reproxy.server: "admin.radioznb.ru"
+      reproxy.port: "80"
+      reproxy.route: "^/(.*)"
+      reproxy.dest: "/$1"
+
+  reproxy:
+    image: ghcr.io/umputun/reproxy:latest
+    hostname: reproxy
+    container_name: reproxy
+    restart: always
+    logging: *default_logging
+    ports:
+      - "80:8080"
+      - "443:8443"
+    environment:
+      - MAX_SIZE=1048576000
+      - TZ=Europe/Moscow
+      - DOCKER_ENABLED=true
+      - SSL_TYPE=auto
+      - SSL_ACME_FQDN=inkvizitor.sukalov.dev,api.radioznb.ru,admin.radioznb.ru,dashboard.radioznb.ru
+      - SSL_ACME_EMAIL=matvey10@gmail.com
+      - STATIC_ENABLED=true
+      - STATIC_RULES=server.radioznb.ru,^/(.*),http://192.168.0.4:80/$$1
+      - TIMEOUT_WRITE=0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - reproxy-acme:/srv/var/acme
+
+volumes:
+  tg-data:
+  convex-data:
+  reproxy-acme:
